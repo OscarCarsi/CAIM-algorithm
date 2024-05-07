@@ -9,10 +9,15 @@ def initialize_discretization(attribute):
     dn = attribute.max()
 
     # Paso 1.2: Formar un conjunto de todos los valores distintos de Fi, colocados en orden ascendente
-    # Se obtienen los valores únicos de la columna
-    unique_values = numpy.unique(attribute)
-    # Se ordenan los valores únicos
-    B = numpy.sort(numpy.append([d0, dn], unique_values))
+    # Obtener los valores únicos y ordenarlos
+    unique_values = numpy.sort(numpy.unique(attribute))
+
+    # Calcular los puntos intermedios
+    midpoints = (unique_values[:-1] + unique_values[1:]) / 2
+
+    # Crear B con d0, los puntos intermedios, y dn
+    B = numpy.append([d0], midpoints)
+    B = numpy.append(B, [dn])
 
     # Paso 1.3: Crear una variable D que contendrá el esquema de discretización
     D = [d0, dn]
@@ -45,7 +50,6 @@ def calculate_caim(D, attribute, classes):
 
     # Calcular y devolver CAIM
     caim = ((Maxr / M_r) * (M_r / M)).sum()
-    print(caim)
     return caim
 
 # Función para actualizar la discretización, le mango el conjunto B que es el valor mínimo y máximo con los valores intermedios, D que es la discretización, GlobalCaim, el atributo, las clases y s que contiene la longitud de las clases
